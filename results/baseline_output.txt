@@ -1,0 +1,55 @@
+Part A - Baseline Skip-gram from Scratch
+A1. Corpus preprocessing and pair generation
+Reduced subset sentences: 2000
+Filtered token count: 14049
+Vocabulary size (min_count=1): 138
+Training pair count (window=2): 44196
+Most frequent words: [('the', 2871), ('a', 697), ('in', 574), ('language', 342), ('at', 288), ('model', 252), ('studies', 225), ('and', 207), ('teacher', 207), ('is', 180)]
+
+A2. Baseline model implementation check
+Demo pair: center='cat', context='runs'
+v_center = [-0.0095  0.0024  0.014  -0.0041  0.0053  0.0025  0.0086 -0.008   0.0235
+ -0.0128 -0.0037  0.0094  0.003   0.0083 -0.005  -0.0007  0.0001  0.0157
+  0.0069  0.008  -0.0066  0.0097  0.0023  0.0139  0.0201 -0.0031 -0.0041
+ -0.0086 -0.0014 -0.0038  0.0036 -0.0014 -0.0036  0.0106 -0.0094  0.0043
+ -0.0041  0.0072  0.0139 -0.003   0.0044  0.0018 -0.008   0.0024  0.0029
+  0.0041 -0.002   0.0009 -0.0115 -0.0036]
+score(context) = -0.000745
+P(context | center) = 0.007242
+loss = 4.927919
+error[context] = -0.992758
+grad_v_center = [ 0.0099  0.012  -0.0041 -0.0055 -0.0156  0.0005 -0.0039  0.0144  0.0048
+ -0.0118 -0.0046  0.0075 -0.0128 -0.0086 -0.0013  0.0264 -0.0114  0.0089
+  0.0041 -0.0082 -0.0079  0.0173 -0.0011  0.0154 -0.0026  0.0016  0.0051
+ -0.0094 -0.0081 -0.0013 -0.0021 -0.0004  0.0162 -0.004  -0.0008 -0.003
+  0.0141  0.0172  0.0031  0.0064  0.0124  0.0015 -0.0176 -0.0042 -0.0035
+  0.0129 -0.0034 -0.0139 -0.0058  0.0143]
+grad_W_out[:, context] = [ 0.0094 -0.0024 -0.0139  0.0041 -0.0053 -0.0024 -0.0086  0.008  -0.0233
+  0.0127  0.0036 -0.0093 -0.0029 -0.0082  0.0049  0.0007 -0.0001 -0.0156
+ -0.0069 -0.0079  0.0065 -0.0096 -0.0022 -0.0138 -0.02    0.003   0.004
+  0.0086  0.0014  0.0038 -0.0036  0.0014  0.0036 -0.0106  0.0093 -0.0043
+  0.004  -0.0072 -0.0138  0.003  -0.0044 -0.0018  0.0079 -0.0024 -0.0029
+ -0.0041  0.002  -0.0009  0.0114  0.0036]
+
+A3. Correctness verification
+Gradient check passed = True
+W_in(19, 10): analytical=-0.00461266, numerical=-0.00461266, rel_error=1.769e-09
+W_in(19, 13): analytical=-0.00859034, numerical=-0.00859034, rel_error=7.109e-11
+W_in(19, 30): analytical=-0.00210219, numerical=-0.00210219, rel_error=1.897e-10
+W_in(19, 46): analytical=-0.00339937, numerical=-0.00339937, rel_error=3.468e-09
+W_in(19, 18): analytical=0.00407735, numerical=0.00407735, rel_error=1.940e-09
+W_out(22, 15): analytical=0.00001632, numerical=0.00001632, rel_error=6.159e-07
+W_out(43, 70): analytical=0.00001744, numerical=0.00001744, rel_error=2.415e-07
+W_out(45, 115): analytical=0.00002993, numerical=0.00002993, rel_error=5.651e-07
+W_out(26, 134): analytical=-0.00002945, numerical=-0.00002945, rel_error=5.371e-07
+W_out(14, 103): analytical=-0.00003595, numerical=-0.00003595, rel_error=8.537e-08
+
+A4. Baseline training and loss curve
+Hyperparameters: d=50, window=2, epochs=5
+epoch 1: avg_loss=3.919008
+epoch 2: avg_loss=2.927825
+epoch 5: avg_loss=2.678210
+Saved loss curve: loss_curve_baseline.png
+
+A5. Full-softmax bottleneck explanation
+Full softmax is expensive because every update scores all 138 vocabulary words, so each pair costs O(Vd) = O(138 x 50). As vocabulary grows, both normalization and gradient computation become much slower.

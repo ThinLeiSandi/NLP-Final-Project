@@ -1,0 +1,44 @@
+Part B - Negative Sampling Extension
+B1. Motivation and formulation
+Negative Sampling replaces the expensive full softmax normalization with a binary objective that updates one positive context word and a small number of sampled negative words.
+
+B2. Negative Sampling implementation
+Demo pair: center='cat', context='runs'
+Sampled negative indices: [99, 128, 108, 98, 76]
+Sampled negative words: ['processing', 'summer', 'researcher', 'plays', 'model']
+one-step loss = 4.158217
+grad_W_in[center] = [ 3.5954e-03  1.0228e-02  1.1292e-02  9.2264e-03  6.9068e-03 -2.4600e-03
+ -1.8721e-02  1.3899e-03 -7.1714e-03 -4.7267e-04 -6.4065e-03  7.4142e-03
+ -4.4681e-04  4.7325e-03  1.3726e-02 -5.6154e-03 -4.5770e-03  2.1373e-02
+  7.1905e-03 -5.9351e-03 -3.3284e-03  1.3765e-03  1.3779e-02 -3.4417e-03
+ -2.5579e-02  3.7529e-03  2.5719e-02  2.4060e-02  2.5703e-02  8.6267e-03
+ -1.8171e-02 -3.3644e-03 -2.8511e-03  1.1038e-02 -1.5641e-02  2.2910e-03
+ -1.7456e-02  4.3215e-03 -4.9019e-03 -4.2784e-03  7.9119e-03 -3.0943e-05
+  1.0136e-02  9.8711e-03 -1.6975e-03 -6.0843e-03  2.3070e-02 -1.0363e-02
+  1.8515e-02 -2.1746e-03]
+grad_W_out[:, context] = [-0.0028 -0.0045  0.0021 -0.0005 -0.0011 -0.001  -0.0027  0.0091  0.0002
+ -0.0012  0.005  -0.0084 -0.0008 -0.0078  0.004   0.0045 -0.0011  0.0084
+ -0.0011 -0.0005 -0.0051 -0.0035  0.0021  0.0055 -0.0086  0.004   0.0052
+  0.0054 -0.0056  0.0026  0.0038 -0.0007  0.001   0.0034 -0.0038 -0.0053
+ -0.0049 -0.0038 -0.002   0.0089 -0.0083 -0.0015 -0.003  -0.0056 -0.0072
+ -0.0021 -0.0022  0.003  -0.0002  0.0043]
+
+B3. Training on the full standardized corpus
+Full-corpus sentences: 7478
+Full-corpus token count: 57216
+Vocabulary size (min_count=1): 164
+Training pair count (window=2): 183996
+Negative samples per positive pair: 5
+epoch 1: avg_loss=2.049999
+epoch 2: avg_loss=1.663233
+epoch 5: avg_loss=1.632651
+Saved loss curve: loss_curve_neg_sampling.png
+
+B4. Comparison with baseline training behaviour
+Baseline final loss on reduced subset = 2.678210
+Negative Sampling final loss on full corpus = 1.632651
+Negative Sampling scales better because each update touches only one positive context word and a small set of sampled negatives, rather than the whole vocabulary.
+This makes full-corpus training practical while preserving the same center-context learning idea.
+
+B5. Technical clarity
+Compared with the baseline, the extension replaces the full-softmax objective with a binary positive-vs-negative objective and adds stochastic negative example generation from a unigram^0.75 distribution.

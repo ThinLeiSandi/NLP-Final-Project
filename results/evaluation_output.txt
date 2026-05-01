@@ -1,0 +1,165 @@
+Part C - Intrinsic Embedding Evaluation
+C1. Cosine similarity evaluation
+
+Baseline model similarities (reduced subset, full softmax):
+('cat', 'rabbit'): 0.8694 -> strong similarity; the score reflects local co-occurrence patterns learned from the corpus
+('cat', 'dog'): 0.8434 -> strong similarity; the score reflects local co-occurrence patterns learned from the corpus
+('river', 'sea'): 0.8279 -> strong similarity; the pair belongs to a shared topical field, so some similarity is expected
+('dog', 'fox'): 0.8190 -> strong similarity; the score reflects local co-occurrence patterns learned from the corpus
+('doctor', 'nurse'): 0.8176 -> strong similarity; this is a meaningful semantic pair that appears in related contexts
+('man', 'woman'): 0.7824 -> strong similarity; the score reflects local co-occurrence patterns learned from the corpus
+('city', 'village'): 0.7696 -> strong similarity; the pair belongs to a shared topical field, so some similarity is expected
+('king', 'queen'): 0.7681 -> strong similarity; this is a meaningful semantic pair that appears in related contexts
+('token', 'embedding'): 0.7421 -> strong similarity; the pair is tied by repeated technical co-occurrence in the corpus
+('book', 'library'): 0.6352 -> strong similarity; this is a meaningful semantic pair that appears in related contexts
+('teacher', 'student'): 0.5592 -> moderate similarity; this is a meaningful semantic pair that appears in related contexts
+('language', 'model'): 0.3598 -> moderate similarity; the pair is tied by repeated technical co-occurrence in the corpus
+
+Negative Sampling model similarities (full corpus):
+('cat', 'rabbit'): 0.8962 -> strong similarity; the score reflects local co-occurrence patterns learned from the corpus
+('dog', 'fox'): 0.8777 -> strong similarity; the score reflects local co-occurrence patterns learned from the corpus
+('doctor', 'nurse'): 0.8689 -> strong similarity; this is a meaningful semantic pair that appears in related contexts
+('cat', 'dog'): 0.8594 -> strong similarity; the score reflects local co-occurrence patterns learned from the corpus
+('king', 'queen'): 0.8344 -> strong similarity; this is a meaningful semantic pair that appears in related contexts
+('man', 'woman'): 0.8321 -> strong similarity; the score reflects local co-occurrence patterns learned from the corpus
+('token', 'embedding'): 0.8217 -> strong similarity; the pair is tied by repeated technical co-occurrence in the corpus
+('city', 'village'): 0.8179 -> strong similarity; the pair belongs to a shared topical field, so some similarity is expected
+('river', 'sea'): 0.7597 -> strong similarity; the pair belongs to a shared topical field, so some similarity is expected
+('teacher', 'student'): 0.6297 -> strong similarity; this is a meaningful semantic pair that appears in related contexts
+('book', 'library'): 0.5829 -> moderate similarity; this is a meaningful semantic pair that appears in related contexts
+('language', 'model'): 0.5309 -> moderate similarity; the pair is tied by repeated technical co-occurrence in the corpus
+
+C2. Nearest-neighbour retrieval
+
+Baseline model neighbors:
+cat: fox (0.8766), tiger (0.8747), lion (0.8716)
+  Observation: Nearest neighbors are fox, tiger, lion. Some are meaningful, but small-corpus frequency effects and reused sentence templates can also create noisy neighbors.
+dog: cat (0.8434), tiger (0.8271), lion (0.8198)
+  Observation: Nearest neighbors are cat, tiger, lion. Some are meaningful, but small-corpus frequency effects and reused sentence templates can also create noisy neighbors.
+teacher: engineer (0.7237), scientist (0.7173), doctor (0.6969)
+  Observation: Nearest neighbors are engineer, scientist, doctor. These are mostly meaningful because the corpus repeatedly groups teacher with role-related words and school or work contexts.
+student: scientist (0.7721), engineer (0.7617), nurse (0.7328)
+  Observation: Nearest neighbors are scientist, engineer, nurse. These are mostly meaningful because the corpus repeatedly groups student with role-related words and school or work contexts.
+doctor: writer (0.8624), manager (0.8532), artist (0.8482)
+  Observation: Nearest neighbors are writer, manager, artist. These are mostly meaningful because the corpus repeatedly groups doctor with role-related words and school or work contexts.
+nurse: doctor (0.8176), writer (0.7906), manager (0.7898)
+  Observation: Nearest neighbors are doctor, writer, manager. These are mostly meaningful because the corpus repeatedly groups nurse with role-related words and school or work contexts.
+king: car (0.9986), boy (0.9978), man (0.9974)
+  Observation: Nearest neighbors are car, boy, man. The pair structure is meaningful, but some neighbors may still reflect frequency and sentence-template effects from the synthetic corpus.
+queen: bus (0.9980), woman (0.9974), girl (0.9957)
+  Observation: Nearest neighbors are bus, woman, girl. The pair structure is meaningful, but some neighbors may still reflect frequency and sentence-template effects from the synthetic corpus.
+language: python (0.6321), algorithm (0.5479), token (0.5322)
+  Observation: Nearest neighbors are python, algorithm, token. These results mainly reflect repeated technical co-occurrence patterns, so they should be fairly meaningful.
+model: embedding (0.6870), of (0.5979), compares (0.5454)
+  Observation: Nearest neighbors are embedding, of, compares. These results mainly reflect repeated technical co-occurrence patterns, so they should be fairly meaningful.
+embedding: computer (0.7593), algorithm (0.7519), network (0.7517)
+  Observation: Nearest neighbors are computer, algorithm, network. These results mainly reflect repeated technical co-occurrence patterns, so they should be fairly meaningful.
+city: village (0.7696), station (0.7397), hospital (0.7085)
+  Observation: Nearest neighbors are village, station, hospital. Some are meaningful, but small-corpus frequency effects and reused sentence templates can also create noisy neighbors.
+river: sea (0.8279), sun (0.7871), forest (0.7866)
+  Observation: Nearest neighbors are sea, sun, forest. Some are meaningful, but small-corpus frequency effects and reused sentence templates can also create noisy neighbors.
+
+Negative Sampling model neighbors:
+cat: lion (0.8963), rabbit (0.8962), fox (0.8954)
+  Observation: Nearest neighbors are lion, rabbit, fox. Some are meaningful, but small-corpus frequency effects and reused sentence templates can also create noisy neighbors.
+dog: rabbit (0.8965), lion (0.8960), tiger (0.8827)
+  Observation: Nearest neighbors are rabbit, lion, tiger. Some are meaningful, but small-corpus frequency effects and reused sentence templates can also create noisy neighbors.
+teacher: doctor (0.8110), manager (0.7705), scientist (0.7655)
+  Observation: Nearest neighbors are doctor, manager, scientist. These are mostly meaningful because the corpus repeatedly groups teacher with role-related words and school or work contexts.
+student: nurse (0.8156), engineer (0.7987), scientist (0.7834)
+  Observation: Nearest neighbors are nurse, engineer, scientist. These are mostly meaningful because the corpus repeatedly groups student with role-related words and school or work contexts.
+doctor: manager (0.8711), nurse (0.8689), artist (0.8657)
+  Observation: Nearest neighbors are manager, nurse, artist. These are mostly meaningful because the corpus repeatedly groups doctor with role-related words and school or work contexts.
+nurse: doctor (0.8689), writer (0.8510), artist (0.8272)
+  Observation: Nearest neighbors are doctor, writer, artist. These are mostly meaningful because the corpus repeatedly groups nurse with role-related words and school or work contexts.
+king: man (0.9893), boy (0.9875), queen (0.8344)
+  Observation: Nearest neighbors are man, boy, queen. The pair structure is meaningful, but some neighbors may still reflect frequency and sentence-template effects from the synthetic corpus.
+queen: girl (0.9841), woman (0.9839), bus (0.8718)
+  Observation: Nearest neighbors are girl, woman, bus. The pair structure is meaningful, but some neighbors may still reflect frequency and sentence-template effects from the synthetic corpus.
+language: natural (0.6979), python (0.6391), processing (0.6383)
+  Observation: Nearest neighbors are natural, python, processing. These results mainly reflect repeated technical co-occurrence patterns, so they should be fairly meaningful.
+model: lesson (0.7214), story (0.7155), idea (0.6971)
+  Observation: Nearest neighbors are lesson, story, idea. These results mainly reflect repeated technical co-occurrence patterns, so they should be fairly meaningful.
+embedding: system (0.8352), computer (0.8349), vector (0.8344)
+  Observation: Nearest neighbors are system, computer, vector. These results mainly reflect repeated technical co-occurrence patterns, so they should be fairly meaningful.
+city: village (0.8179), office (0.7943), library (0.7941)
+  Observation: Nearest neighbors are village, office, library. Some are meaningful, but small-corpus frequency effects and reused sentence templates can also create noisy neighbors.
+river: field (0.9028), forest (0.8945), royal (0.8152)
+  Observation: Nearest neighbors are field, forest, royal. Some are meaningful, but small-corpus frequency effects and reused sentence templates can also create noisy neighbors.
+
+C3. Quality of interpretation
+The corpus is moderately sized for a classroom project, but it still uses many repeated sentence templates. This means embeddings are strongly shaped by local co-occurrence patterns and frequency effects.
+High-frequency template words can pull multiple concepts closer together than expected, which is why some neighbors are meaningful while others are noisy.
+The Negative Sampling model is trained on the full corpus, so it usually gives more stable similarities and neighbors than the baseline full-softmax model trained on a reduced subset.
+Corpus bias also matters: semantic relations that are repeated often, such as profession pairs or technical terms, are easier to learn than rare or weakly connected words.
+
+Baseline corpus size used for Part C: 2000 sentences, 14049 filtered tokens.
+Negative Sampling corpus size used for Part C: 7478 sentences, 57216 filtered tokens.
+
+Part D - Comparison with Gensim
+D1. Experimental comparison
+The Gensim model was trained on the same full standardized corpus with closely matched visible settings: sg=1, vector_size=50, window=2, min_count=1, epochs=5, workers=1, seed=0, negative=5, sample=0.
+
+Similarity comparison (Negative Sampling model vs Gensim):
+('cat', 'dog'): custom=0.8594, gensim=0.8833, custom_rank=4, gensim_rank=4
+('cat', 'rabbit'): custom=0.8962, gensim=0.9256, custom_rank=1, gensim_rank=1
+('dog', 'fox'): custom=0.8777, gensim=0.8931, custom_rank=2, gensim_rank=3
+('teacher', 'student'): custom=0.6297, gensim=0.6995, custom_rank=10, gensim_rank=10
+('doctor', 'nurse'): custom=0.8689, gensim=0.8778, custom_rank=3, gensim_rank=5
+('king', 'queen'): custom=0.8344, gensim=0.8661, custom_rank=5, gensim_rank=7
+('man', 'woman'): custom=0.8321, gensim=0.8761, custom_rank=6, gensim_rank=6
+('language', 'model'): custom=0.5309, gensim=0.4771, custom_rank=12, gensim_rank=12
+('token', 'embedding'): custom=0.8217, gensim=0.8980, custom_rank=7, gensim_rank=2
+('city', 'village'): custom=0.8179, gensim=0.8575, custom_rank=8, gensim_rank=8
+('river', 'sea'): custom=0.7597, gensim=0.8467, custom_rank=9, gensim_rank=9
+('book', 'library'): custom=0.5829, gensim=0.5704, custom_rank=11, gensim_rank=11
+
+Nearest-neighbour comparison:
+cat:
+  custom -> lion (0.8963), rabbit (0.8962), fox (0.8954)
+  gensim -> tiger (0.9305), lion (0.9281), rabbit (0.9256)
+dog:
+  custom -> rabbit (0.8965), lion (0.8960), tiger (0.8827)
+  gensim -> rabbit (0.8961), tiger (0.8940), fox (0.8931)
+teacher:
+  custom -> doctor (0.8110), manager (0.7705), scientist (0.7655)
+  gensim -> doctor (0.8621), engineer (0.8217), scientist (0.8146)
+student:
+  custom -> nurse (0.8156), engineer (0.7987), scientist (0.7834)
+  gensim -> nurse (0.8934), engineer (0.8758), scientist (0.8721)
+doctor:
+  custom -> manager (0.8711), nurse (0.8689), artist (0.8657)
+  gensim -> manager (0.9442), writer (0.9390), artist (0.9371)
+nurse:
+  custom -> doctor (0.8689), writer (0.8510), artist (0.8272)
+  gensim -> manager (0.9023), writer (0.9010), artist (0.8988)
+king:
+  custom -> man (0.9893), boy (0.9875), queen (0.8344)
+  gensim -> boy (0.9965), man (0.9961), car (0.8877)
+queen:
+  custom -> girl (0.9841), woman (0.9839), bus (0.8718)
+  gensim -> girl (0.9980), woman (0.9977), bus (0.8946)
+language:
+  custom -> natural (0.6979), python (0.6391), processing (0.6383)
+  gensim -> natural (0.7563), system (0.7535), network (0.7431)
+model:
+  custom -> lesson (0.7214), story (0.7155), idea (0.6971)
+  gensim -> idea (0.8502), lesson (0.8485), story (0.8303)
+embedding:
+  custom -> system (0.8352), computer (0.8349), vector (0.8344)
+  gensim -> network (0.9020), vector (0.8983), token (0.8980)
+city:
+  custom -> village (0.8179), office (0.7943), library (0.7941)
+  gensim -> station (0.8618), village (0.8575), library (0.8423)
+river:
+  custom -> field (0.9028), forest (0.8945), royal (0.8152)
+  gensim -> field (0.9357), forest (0.9324), royal (0.8754)
+
+D2. Result analysis
+Spearman rank correlation between similarity lists: rho = 0.8811, p-value = 0.0002
+The comparison should focus more on whether the models preserve similar relative structure than on exact numerical equality.
+Differences are expected for at least four reasons:
+1. Gensim uses its own optimized implementation and update ordering, so training dynamics differ even with the same seed.
+2. Initialization details can differ slightly, which changes the trajectory of stochastic training.
+3. Training schedule details such as internal batching and iteration order can produce different local optima.
+4. Frequency effects and implementation-level optimizations in Gensim can reshape neighborhood structure even when the visible hyperparameters match.

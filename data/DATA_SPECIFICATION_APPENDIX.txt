@@ -1,0 +1,25 @@
+DATA SPECIFICATION APPENDIX
+=========================
+
+Official dataset for the final project:
+- file: corpus.txt
+- language: English
+- format: one sentence per line
+- style: lowercase, simple educational corpus
+- intended use: Word2Vec / Skip-gram / Negative Sampling classroom project
+
+Current corpus statistics:
+- number of sentences: 7478
+- number of tokens: 57216
+- vocabulary size: 164
+
+Feasibility note:
+- The baseline full-softmax model should be trained on a reduced subset for correctness and controlled comparison.
+- The Negative Sampling model should be trained on the full provided corpus.
+
+Suggested starter settings:
+- embedding dimension: 50
+- context window: 2
+- epochs: 5 to 15
+- negative samples: 5
+- min_count: 2 or 3 if needed

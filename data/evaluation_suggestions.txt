@@ -1,0 +1,28 @@
+Suggested evaluation word pairs
+cat dog
+cat rabbit
+dog fox
+teacher student
+doctor nurse
+king queen
+man woman
+language model
+token embedding
+city village
+river sea
+book library
+
+Suggested query words for nearest neighbors
+cat
+dog
+teacher
+student
+doctor
+nurse
+king
+queen
+language
+model
+embedding
+city
+river
