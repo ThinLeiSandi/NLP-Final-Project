@@ -3,62 +3,62 @@ D1. Experimental comparison
 The Gensim model was trained on the same full standardized corpus with closely matched visible settings: sg=1, vector_size=50, window=2, min_count=1, epochs=5, workers=1, seed=0, negative=5, sample=0.
 
 Similarity comparison (Negative Sampling model vs Gensim):
-('cat', 'dog'): custom=0.8594, gensim=0.8833, custom_rank=4, gensim_rank=4
-('cat', 'rabbit'): custom=0.8962, gensim=0.9256, custom_rank=1, gensim_rank=1
-('dog', 'fox'): custom=0.8777, gensim=0.8931, custom_rank=2, gensim_rank=3
-('teacher', 'student'): custom=0.6297, gensim=0.6995, custom_rank=10, gensim_rank=10
-('doctor', 'nurse'): custom=0.8689, gensim=0.8778, custom_rank=3, gensim_rank=5
-('king', 'queen'): custom=0.8344, gensim=0.8661, custom_rank=5, gensim_rank=7
-('man', 'woman'): custom=0.8321, gensim=0.8761, custom_rank=6, gensim_rank=6
-('language', 'model'): custom=0.5309, gensim=0.4771, custom_rank=12, gensim_rank=12
-('token', 'embedding'): custom=0.8217, gensim=0.8980, custom_rank=7, gensim_rank=2
-('city', 'village'): custom=0.8179, gensim=0.8575, custom_rank=8, gensim_rank=8
-('river', 'sea'): custom=0.7597, gensim=0.8467, custom_rank=9, gensim_rank=9
-('book', 'library'): custom=0.5829, gensim=0.5704, custom_rank=11, gensim_rank=11
+('cat', 'dog'): custom=0.9167, gensim=0.8833, custom_rank=3, gensim_rank=4
+('cat', 'rabbit'): custom=0.9423, gensim=0.9256, custom_rank=1, gensim_rank=1
+('dog', 'fox'): custom=0.9065, gensim=0.8931, custom_rank=4, gensim_rank=3
+('teacher', 'student'): custom=0.7897, gensim=0.6995, custom_rank=9, gensim_rank=10
+('doctor', 'nurse'): custom=0.9392, gensim=0.8778, custom_rank=2, gensim_rank=5
+('king', 'queen'): custom=0.8920, gensim=0.8661, custom_rank=5, gensim_rank=7
+('man', 'woman'): custom=0.8834, gensim=0.8761, custom_rank=6, gensim_rank=6
+('language', 'model'): custom=0.3759, gensim=0.4771, custom_rank=12, gensim_rank=12
+('token', 'embedding'): custom=0.7662, gensim=0.8980, custom_rank=10, gensim_rank=2
+('city', 'village'): custom=0.8686, gensim=0.8575, custom_rank=7, gensim_rank=8
+('river', 'sea'): custom=0.7989, gensim=0.8467, custom_rank=8, gensim_rank=9
+('book', 'library'): custom=0.7444, gensim=0.5704, custom_rank=11, gensim_rank=11
 
 Nearest-neighbour comparison:
 cat:
-  custom -> lion (0.8963), rabbit (0.8962), fox (0.8954)
+  custom -> lion (0.9431), rabbit (0.9423), fox (0.9384)
   gensim -> tiger (0.9305), lion (0.9281), rabbit (0.9256)
 dog:
-  custom -> rabbit (0.8965), lion (0.8960), tiger (0.8827)
+  custom -> rabbit (0.9211), lion (0.9184), cat (0.9167)
   gensim -> rabbit (0.8961), tiger (0.8940), fox (0.8931)
 teacher:
-  custom -> doctor (0.8110), manager (0.7705), scientist (0.7655)
+  custom -> doctor (0.8785), scientist (0.8655), manager (0.8513)
   gensim -> doctor (0.8621), engineer (0.8217), scientist (0.8146)
 student:
-  custom -> nurse (0.8156), engineer (0.7987), scientist (0.7834)
+  custom -> nurse (0.9167), engineer (0.8868), scientist (0.8778)
   gensim -> nurse (0.8934), engineer (0.8758), scientist (0.8721)
 doctor:
-  custom -> manager (0.8711), nurse (0.8689), artist (0.8657)
+  custom -> manager (0.9563), artist (0.9530), writer (0.9511)
   gensim -> manager (0.9442), writer (0.9390), artist (0.9371)
 nurse:
-  custom -> doctor (0.8689), writer (0.8510), artist (0.8272)
+  custom -> doctor (0.9392), writer (0.9297), artist (0.9258)
   gensim -> manager (0.9023), writer (0.9010), artist (0.8988)
 king:
-  custom -> man (0.9893), boy (0.9875), queen (0.8344)
+  custom -> man (0.9911), boy (0.9903), girl (0.8943)
   gensim -> boy (0.9965), man (0.9961), car (0.8877)
 queen:
-  custom -> girl (0.9841), woman (0.9839), bus (0.8718)
+  custom -> girl (0.9862), woman (0.9798), king (0.8920)
   gensim -> girl (0.9980), woman (0.9977), bus (0.8946)
 language:
-  custom -> natural (0.6979), python (0.6391), processing (0.6383)
+  custom -> python (0.5907), natural (0.5618), processing (0.5036)
   gensim -> natural (0.7563), system (0.7535), network (0.7431)
 model:
-  custom -> lesson (0.7214), story (0.7155), idea (0.6971)
+  custom -> story (0.7973), project (0.7911), idea (0.7892)
   gensim -> idea (0.8502), lesson (0.8485), story (0.8303)
 embedding:
-  custom -> system (0.8352), computer (0.8349), vector (0.8344)
+  custom -> algorithm (0.7824), system (0.7800), computer (0.7780)
   gensim -> network (0.9020), vector (0.8983), token (0.8980)
 city:
-  custom -> village (0.8179), office (0.7943), library (0.7941)
+  custom -> village (0.8686), library (0.8518), market (0.8426)
   gensim -> station (0.8618), village (0.8575), library (0.8423)
 river:
-  custom -> field (0.9028), forest (0.8945), royal (0.8152)
+  custom -> field (0.9526), forest (0.9523), car (0.8294)
   gensim -> field (0.9357), forest (0.9324), royal (0.8754)
 
 D2. Result analysis
-Spearman rank correlation between similarity lists: rho = 0.8811, p-value = 0.0002
+Spearman rank correlation between similarity lists: rho = 0.7133, p-value = 0.0092
 The comparison should focus more on whether the models preserve similar relative structure than on exact numerical equality.
 Differences are expected for at least four reasons:
 1. Gensim uses its own optimized implementation and update ordering, so training dynamics differ even with the same seed.

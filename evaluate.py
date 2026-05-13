@@ -69,47 +69,98 @@ def top_k_neighbors(
 
 
 def pair_interpretation(word_a: str, word_b: str, score: float) -> str:
-    if score >= 0.60:
+    if score >= 0.75:
+        strength = "very strong"
+        strength_comment = "embeddings are very close in vector space, indicating highly overlapping contexts"
+    elif score >= 0.55:
         strength = "strong"
+        strength_comment = "embeddings are close, reflecting consistent co-occurrence patterns"
     elif score >= 0.30:
         strength = "moderate"
+        strength_comment = "embeddings share some context overlap but are not tightly clustered"
     elif score >= 0.00:
         strength = "weak"
+        strength_comment = "little shared context was captured during training"
     else:
         strength = "negative"
+        strength_comment = "embeddings point in opposite directions, suggesting contrasting contexts"
 
-    if {word_a, word_b} in ({"teacher", "student"}, {"doctor", "nurse"}, {"king", "queen"}, {"book", "library"}):
-        reason = "this is a meaningful semantic pair that appears in related contexts"
-    elif {word_a, word_b} in ({"language", "model"}, {"token", "embedding"}):
-        reason = "the pair is tied by repeated technical co-occurrence in the corpus"
-    elif {word_a, word_b} in ({"city", "village"}, {"river", "sea"}):
-        reason = "the pair belongs to a shared topical field, so some similarity is expected"
+    pair_set = frozenset({word_a, word_b})
+    if pair_set in (frozenset({"teacher", "student"}), frozenset({"doctor", "nurse"})):
+        category = "profession/role pair; similarity reflects shared occupational sentence contexts"
+    elif pair_set == frozenset({"king", "queen"}):
+        category = "relational pair; similarity driven by repeated relational sentence templates"
+    elif pair_set == frozenset({"man", "woman"}):
+        category = "gender-relational pair; similarity shaped by symmetric sentence frames"
+    elif pair_set in (frozenset({"language", "model"}), frozenset({"token", "embedding"})):
+        category = "technical pair; similarity reflects repeated instructional co-occurrence patterns"
+    elif pair_set in (frozenset({"city", "village"}), frozenset({"river", "sea"})):
+        category = "geographic/topical pair; similarity reflects shared environmental sentence contexts"
+    elif pair_set == frozenset({"book", "library"}):
+        category = "cultural pair; similarity reflects repeated sentence-level associations"
+    elif pair_set in (frozenset({"cat", "dog"}), frozenset({"cat", "rabbit"}), frozenset({"dog", "fox"})):
+        category = "animal pair; similarity reflects shared template positions in the corpus"
     else:
-        reason = "the score reflects local co-occurrence patterns learned from the corpus"
-    return f"{strength} similarity; {reason}"
+        category = "general pair; similarity reflects local co-occurrence patterns"
+
+    return f"{strength} similarity (score={score:.4f}); {strength_comment}; {category}"
 
 
 def neighbor_observation(word: str, neighbors: list[tuple[str, float]]) -> str:
+    # Interpretation derived from actual neighbor names and scores, not fixed strings
     neighbor_words = [candidate for candidate, _score in neighbors]
-    joined = ", ".join(neighbor_words)
-    if word in {"teacher", "student", "doctor", "nurse"}:
-        return (
-            f"Nearest neighbors are {joined}. These are mostly meaningful because the corpus repeatedly groups "
-            f"{word} with role-related words and school or work contexts."
+    neighbor_scores = [score for _candidate, score in neighbors]
+    joined = ", ".join(f"{w} ({s:.4f})" for w, s in neighbors)
+
+    avg_score = sum(neighbor_scores) / len(neighbor_scores) if neighbor_scores else 0.0
+    top_score = neighbor_scores[0] if neighbor_scores else 0.0
+
+    if avg_score >= 0.75:
+        cohesion = "very tight cluster (avg neighbor similarity >= 0.75)"
+    elif avg_score >= 0.55:
+        cohesion = "reasonably tight cluster (avg neighbor similarity >= 0.55)"
+    elif avg_score >= 0.30:
+        cohesion = "loose cluster (avg neighbor similarity >= 0.30)"
+    else:
+        cohesion = "very diffuse neighborhood (avg neighbor similarity < 0.30)"
+
+    # Check whether top neighbor is semantically plausible for this word
+    animal_words = {"cat", "dog", "fox", "rabbit", "tiger", "lion"}
+    profession_words = {"teacher", "student", "doctor", "nurse", "engineer", "scientist", "manager"}
+    technical_words = {"language", "model", "embedding", "token", "algorithm", "python", "vector"}
+
+    if word in animal_words:
+        domain = "animal"
+        plausible = animal_words
+    elif word in profession_words:
+        domain = "profession/role"
+        plausible = profession_words
+    elif word in technical_words:
+        domain = "technical/NLP"
+        plausible = technical_words
+    else:
+        domain = "general"
+        plausible = set()
+
+    plausible_neighbors = [w for w in neighbor_words if w in plausible]
+    surprising_neighbors = [w for w in neighbor_words if w not in plausible and plausible]
+
+    if plausible_neighbors and surprising_neighbors:
+        semantic_comment = (
+            f"plausible {domain} neighbors: {', '.join(plausible_neighbors)}; "
+            f"surprising neighbors: {', '.join(surprising_neighbors)} (likely corpus template artifacts)"
         )
-    if word in {"king", "queen"}:
-        return (
-            f"Nearest neighbors are {joined}. The pair structure is meaningful, but some neighbors may still reflect "
-            "frequency and sentence-template effects from the synthetic corpus."
-        )
-    if word in {"language", "model", "embedding"}:
-        return (
-            f"Nearest neighbors are {joined}. These results mainly reflect repeated technical co-occurrence patterns, "
-            "so they should be fairly meaningful."
-        )
+    elif plausible_neighbors:
+        semantic_comment = f"all neighbors are plausible {domain} words, suggesting a clean semantic cluster"
+    elif plausible:
+        semantic_comment = f"no clearly plausible {domain} neighbors found; results may reflect corpus frequency effects"
+    else:
+        semantic_comment = "neighbors reflect general co-occurrence patterns from the corpus"
+
     return (
-        f"Nearest neighbors are {joined}. Some are meaningful, but small-corpus frequency effects and reused sentence "
-        "templates can also create noisy neighbors."
+        f"Top-3 neighbors: {joined}. "
+        f"Neighborhood cohesion: {cohesion}. "
+        f"Semantic quality: {semantic_comment}."
     )
 
 
@@ -218,7 +269,7 @@ def build_part_c_report(
         [
             "",
             "C3. Quality of interpretation",
-            "The corpus is moderately sized for a classroom project but it still uses many repeated sentence templates. "
+            "The corpus is moderately sized for a classroom project, but it still uses many repeated sentence templates. "
             "This means embeddings are strongly shaped by local co-occurrence patterns and frequency effects.",
             "High-frequency template words can pull multiple concepts closer together than expected, which is why some neighbors are meaningful while others are noisy.",
             "The Negative Sampling model is trained on the full corpus, so it usually gives more stable similarities and neighbors than the baseline full-softmax model trained on a reduced subset.",

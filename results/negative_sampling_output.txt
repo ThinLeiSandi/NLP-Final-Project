@@ -29,14 +29,14 @@ Full-corpus token count: 57216
 Vocabulary size (min_count=1): 164
 Training pair count (window=2): 183996
 Negative samples per positive pair: 5
-epoch 1: avg_loss=2.049999
-epoch 2: avg_loss=1.663233
-epoch 5: avg_loss=1.632651
+epoch 1: avg_loss=2.087633
+epoch 2: avg_loss=1.733573
+epoch 5: avg_loss=1.736211
 Saved loss curve: loss_curve_neg_sampling.png
 
 B4. Comparison with baseline training behaviour
 Baseline final loss on reduced subset = 2.678210
-Negative Sampling final loss on full corpus = 1.632651
+Negative Sampling final loss on full corpus = 1.736211
 Negative Sampling scales better because each update touches only one positive context word and a small set of sampled negatives, rather than the whole vocabulary.
 This makes full-corpus training practical while preserving the same center-context learning idea.
 

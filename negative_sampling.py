@@ -78,8 +78,12 @@ class SkipGramNegativeSampling:
         lr: float,
     ) -> dict[str, object]:
         loss, grad_W_in, grad_W_out, v_c = self.pair_loss_and_gradients(center_idx, context_idx, negative_indices)
-        self.W_in -= lr * grad_W_in
-        self.W_out -= lr * grad_W_out
+        # Sparse update: only touch the center row of W_in, not the full matrix
+        self.W_in[center_idx] -= lr * grad_W_in[center_idx]
+        # Sparse update: only touch context column and negative columns of W_out
+        cols_to_update = [context_idx] + list(negative_indices)
+        for col in cols_to_update:
+            self.W_out[:, col] -= lr * grad_W_out[:, col]
         return {
             "loss": loss,
             "v_c": v_c,
