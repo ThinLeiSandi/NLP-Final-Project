@@ -218,7 +218,7 @@ def build_part_c_report(
         [
             "",
             "C3. Quality of interpretation",
-            "The corpus is moderately sized for a classroom project, but it still uses many repeated sentence templates. "
+            "The corpus is moderately sized for a classroom project but it still uses many repeated sentence templates. "
             "This means embeddings are strongly shaped by local co-occurrence patterns and frequency effects.",
             "High-frequency template words can pull multiple concepts closer together than expected, which is why some neighbors are meaningful while others are noisy.",
             "The Negative Sampling model is trained on the full corpus, so it usually gives more stable similarities and neighbors than the baseline full-softmax model trained on a reduced subset.",
